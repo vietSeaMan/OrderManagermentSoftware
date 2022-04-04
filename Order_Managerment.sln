@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order_Managerment_For_Photography_Studio", "Order_Managerment_For_Photography_Studio\Order_Managerment_For_Photography_Studio.csproj", "{28F52453-A47F-42AD-904A-5C56F5B14DF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28F52453-A47F-42AD-904A-5C56F5B14DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F52453-A47F-42AD-904A-5C56F5B14DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F52453-A47F-42AD-904A-5C56F5B14DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F52453-A47F-42AD-904A-5C56F5B14DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D871D725-AEE1-44A6-A060-C1E530A29FEE}
+	EndGlobalSection
+EndGlobal
