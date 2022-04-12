@@ -1,4 +1,5 @@
-﻿using System;
+﻿///Use this form for search and edit function
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,17 +12,23 @@ namespace Order_Managerment_For_Photography_Studio
 {
     public partial class SearchForm : Form
     {
+        //check the new information is saved or not
         bool saveCheck = true;
+        //get the Order List form HomeScreen class
         List<Order> mainOrderList = HomeScreen.orderList;
         public SearchForm()
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Show the result of after search
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="shilt"></param>
         private void showResult(Order order, int shilt)
         {
          
-
+            //Create new panel to show in formation 
             RichTextBox note = new RichTextBox();
             this.panel1.Controls.Add(note);
             Label payment = new Label();
@@ -50,6 +57,7 @@ namespace Order_Managerment_For_Photography_Studio
             note.ReadOnly = true;
             note.Size = new System.Drawing.Size(157, 80);
             note.Text = order.Note;
+            //Get Double Click event
             note.DoubleClick += delegate
             {
                 saveCheck = false;
@@ -64,6 +72,7 @@ namespace Order_Managerment_For_Photography_Studio
             payment.Location = new System.Drawing.Point(707, 45 + shilt);
             
             payment.Size = new System.Drawing.Size(53, 46);
+            //Get Double Click event
             payment.Click += delegate
             {
                 saveCheck = false;
@@ -83,19 +92,13 @@ namespace Order_Managerment_For_Photography_Studio
             // 
             // orderDate
             // 
-            
             orderDate.Value = Convert.ToDateTime(order.OrderDate);
             orderDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             orderDate.Location = new System.Drawing.Point(361, 59 + shilt);
             orderDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             orderDate.Size = new System.Drawing.Size(164, 17);
             orderDate.Enabled = true;
-            orderDate.CloseUp += delegate
-            {
-                saveCheck = false;
-                orderDate.CalendarTitleForeColor = System.Drawing.Color.GreenYellow;
-            };
-            
+   
             // 
             // orderCode
             // 
@@ -117,6 +120,7 @@ namespace Order_Managerment_For_Photography_Studio
             totalFee.ReadOnly = true;
             totalFee.Size = new System.Drawing.Size(164, 17);
             totalFee.Text = "" + order.TotalFee;
+            //Get Double Click event
             totalFee.DoubleClick += delegate
             {
                 saveCheck = false;
@@ -133,6 +137,7 @@ namespace Order_Managerment_For_Photography_Studio
             customerName.ReadOnly = true;
             customerName.Size = new System.Drawing.Size(164, 17);
             customerName.Text = order.CustomerName;
+            //Get Double Click event
             customerName.DoubleClick += delegate
             {
                 saveCheck = false;
@@ -146,6 +151,7 @@ namespace Order_Managerment_For_Photography_Studio
             preview.Size = new System.Drawing.Size(111, 23);
             preview.Text = "preview";
             preview.UseVisualStyleBackColor = true;
+            //Get Click event to show preview image
             preview.Click += delegate
             {
                 try
@@ -165,6 +171,7 @@ namespace Order_Managerment_For_Photography_Studio
             updateInfo.Size = new System.Drawing.Size(111, 23);
             updateInfo.Text = "Cập nhập thông tin";
             updateInfo.UseVisualStyleBackColor = true;
+            //Click button to save all new data to this.object (Order object)
             updateInfo.Click += delegate
             {
                 order.CustomerName = customerName.Text;
@@ -183,65 +190,86 @@ namespace Order_Managerment_For_Photography_Studio
             };
         }
 
+        /// <summary>
+        /// Search button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
+            //clear the old result 
             this.panel1.Controls.Clear();
-
-            this.label1.Refresh();
-        
+            //Create a list to store result of order 
             List<Order> searchList = null;
+
+            //Search by Name
             if(this.searchByNameCheckBox.Checked && !this.searcByDataCheckBox.Checked)
             {
                 searchList = mainProcess.findOrderbyName(mainOrderList, this.customerNameSeach.Text);
             }
+            //Search by Date
             else if (!this.searchByNameCheckBox.Checked && this.searcByDataCheckBox.Checked)
             {
                 searchList = mainProcess.findOrderByDate(mainOrderList, this.orderDateSearch.Text);
             }
+            //Search by name and date
             else if(this.searchByNameCheckBox.Checked && this.searcByDataCheckBox.Checked)
             {
                 searchList = mainProcess.findOrder(mainOrderList, this.customerNameSeach.Text, this.orderDateSearch.Text);
             }
             
-
+            //Show the message if have no order found
             if (searchList == null)
             {
                 MessageBox.Show("Not found any order!");
                 return;
-            }
-               
+            } 
+            //if oreder is found then show them to screen
             else
             {
-                int shilt = 0;
+                int shiltOfRow = 0;
                 foreach(Order order in searchList)
                 {
-                    showResult(order, shilt);
-                    shilt += 95;
+                    //Call showResult method
+                    showResult(order, shiltOfRow);
+                    //Shilt of Row when the result be showed
+                    shiltOfRow += 95;
                 }
                 
             }
+            //Reset searchList for the next other search
             searchList.Clear();
 
         }
-
+        /// <summary>
+        /// Set value of Date search 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SearchForm_Load(object sender, EventArgs e)
         {
             this.orderDateSearch.Value = DateTime.Today;
         }
 
         
-
+        /// <summary>
+        /// Save and exit button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveAndExit_Click(object sender, EventArgs e)
         {
             if (!saveCheck)
                 MessageBox.Show("Bạn chưa lưu thông tin vừa sửa đổi!");
             else
             {
+                //create new String list to save data to file
                 List<String> stringList = new List<String>();
                 foreach (Order order in mainOrderList)
                 {
                     stringList.Add(order.ToString());
                 }
+                //Call write data to FIle method from file object in HomeScreen class
                 HomeScreen.file.writeAllToFile(stringList);
                 MessageBox.Show("Cập nhập thông tin thành công!");
                 this.Close();
@@ -249,9 +277,13 @@ namespace Order_Managerment_For_Photography_Studio
             
 
         }
-
+        /// <summary>
+        /// Cancel and Exit button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CancelAndExti_Click(object sender, EventArgs e)
-        {
+        {   
             
             this.Close();
         }

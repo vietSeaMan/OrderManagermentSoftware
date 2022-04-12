@@ -1,4 +1,5 @@
 ﻿
+//The user will use this from to create a new order and save it to file
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,13 +17,17 @@ namespace Order_Managerment_For_Photography_Studio
 {
     public partial class CreateForm : Form
     {
-        
-    
+
         public CreateForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Button for create new order code after have enough information liek name, date,...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createOrderCodeButton_Click_1(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(this.customerNamel.Text) || String.IsNullOrEmpty(this.orderDate.Text))
@@ -36,21 +41,31 @@ namespace Order_Managerment_For_Photography_Studio
             }
         }
 
+        /// <summary>
+        /// method is run when ok Button of the Open dialog is click 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rootFile_FileOk(object sender, CancelEventArgs e)
         {
             this.rootImageBox.BackgroundImage = Image.FromFile(this.rootFile.FileName);
         }
 
+        /// <summary>
+        /// Show Open Dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void upRootFile_Click_1(object sender, EventArgs e)
         {
             this.rootFile.ShowDialog();
         }
 
-        private void upEditedFile_Click(object sender, EventArgs e)
-        {
-            this.editedFile.ShowDialog();
-        }
-
+        /// <summary>
+        /// Create new order Code and save to the file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createNewOrderButton_Click(object sender, EventArgs e)
         {
             if(String.IsNullOrEmpty(this.orderCode.Text))
@@ -72,10 +87,12 @@ namespace Order_Managerment_For_Photography_Studio
                 String note = this.noteTextBox.Text;
                 String pathOfImage = this.rootFile.FileName;
 
+               //Create new Order object to store information of new order
                 Order newOrder = new Order(customerName, orderDate, totalFee, payment, orderCode, note, pathOfImage);
 
+                //Add new Order object to orderList
                 HomeScreen.orderList.Add(newOrder);
-
+                //Write data append to file
                 HomeScreen.file.writeLineToFile(newOrder.ToString());
 
                 MessageBox.Show("Tạo đơn hàng mới thành công!");
@@ -84,6 +101,11 @@ namespace Order_Managerment_For_Photography_Studio
             }
         }
 
+        /// <summary>
+        /// check the format of total price data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void totalPrice_TextChanged(object sender, EventArgs e)
         {
             try
@@ -97,6 +119,11 @@ namespace Order_Managerment_For_Photography_Studio
             }
         }
 
+        /// <summary>
+        /// Reset all information in all field
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void resetAllFieldButton_Click(object sender, EventArgs e)
         {
             this.customerNamel.Text = "";

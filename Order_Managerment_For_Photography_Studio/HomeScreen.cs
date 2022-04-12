@@ -1,4 +1,6 @@
-﻿using System;
+﻿//This form use to show information of all order has create
+//This include button to access the other form
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,8 +14,9 @@ namespace Order_Managerment_For_Photography_Studio
 {
     public partial class HomeScreen : Form
     {
-        
+        //Create a new Colection List to store orders load from file and from user created
         public static List<Order> orderList = new List<Order>();
+        //Declare object to work with file
         public static ExternalFile file = new ExternalFile();
         public HomeScreen()
         {
@@ -21,12 +24,22 @@ namespace Order_Managerment_For_Photography_Studio
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Button to open create order from
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             CreateForm crForm = new CreateForm();
             crForm.Show();
         }
 
+        /// <summary>
+        /// Button to open Search Form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             SearchForm srForm = new SearchForm();
@@ -39,9 +52,16 @@ namespace Order_Managerment_For_Photography_Studio
             abForm.Show();
         }
 
+        /// <summary>
+        /// Button to reload data from file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void loadButton_Click(object sender, EventArgs e)
         {
+            //Clear the current List
             orderList.Clear();
+            //Clear all the object in Panel1 in Homescreen
             this.panel1.Controls.Clear();
             mainProcess.getDataFromFile(orderList, file);
             int shift = 0;
@@ -52,20 +72,37 @@ namespace Order_Managerment_For_Photography_Studio
             }
         }
 
+
+        /// <summary>
+        /// Run this method when the form is load for the first time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HomeScreen_Load(object sender, EventArgs e)
         {
+            //Get data from file
             mainProcess.getDataFromFile(orderList, file);
-            int shift = 0;
+            //The shift of each order row 
+            int shiftOfRow = 0;
+            //Show all the data in order List one by one 
             foreach (Order order in orderList)
             {
-                showData(order, shift);
-                shift += 100;
+                showData(order, shiftOfRow);
+                shiftOfRow += 100;
             }
             this.KeyPreview = true;
         }
-
+        /// <summary>
+        /// Method to show all the data from orderList
+        /// Create new lable object to show information of each order object in orderlist
+        /// This information was appeared is read only
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="shift"></param>
         private void showData(Order order, int shift)
         {
+
+            //Create new label parth
             Label note = new Label();
             this.panel1.Controls.Add(note);
             Label payment = new Label();
@@ -83,7 +120,8 @@ namespace Order_Managerment_For_Photography_Studio
             Button showPreview = new Button();
             this.panel1.Controls.Add(showPreview);
 
-            // 
+            //Set informaton for each lable follow order objects
+            ////////////////////////////////// 
             // note
             // 
             note.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,7 +165,7 @@ namespace Order_Managerment_For_Photography_Studio
             // 
             showPreview.BackColor = Color.White;
             showPreview.Location = new System.Drawing.Point(285, 60 + shift);
-            //Click button
+            //Click button to show preview image of each order
             showPreview.Click += delegate
             {
                 try
@@ -165,6 +203,11 @@ namespace Order_Managerment_For_Photography_Studio
 
         }
 
+        /// <summary>
+        /// Catch keyboard press
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HomeScreen_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F2)
